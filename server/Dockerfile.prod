@@ -1,0 +1,35 @@
+FROM node:20-alpine AS base
+
+WORKDIR /usr/src/app
+
+ENV NODE_ENV=production
+
+COPY package.json yarn.lock ./
+
+FROM base AS deps
+
+RUN yarn install --frozen-lockfile --production
+
+FROM base AS build
+
+RUN yarn install --frozen-lockfile
+
+COPY . .
+
+RUN npx prisma generate
+
+RUN yarn build
+
+FROM base AS production
+
+COPY --from=deps /usr/src/app/node_modules ./node_modules
+
+COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/prisma ./prisma
+COPY package*.json ./
+
+RUN npx prisma generate
+
+EXPOSE 5050
+
+CMD ["node", "dist/main.js"]
