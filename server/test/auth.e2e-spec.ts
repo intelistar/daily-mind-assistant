@@ -30,7 +30,7 @@ describe('AuthController (e2e)', () => {
   describe('/auth/register POST', () => {
     it('should register a user', async () => {
       const registerDto = {
-        name: 'John Doe',
+        name: 'John Doee',
         email: 'john1@example.com',
         password: '11111111',
       };
