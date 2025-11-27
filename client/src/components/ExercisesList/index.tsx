@@ -10,6 +10,7 @@ import ExerciseComponent from '../Exercise';
 import { toaster } from '../ui/toaster';
 
 import { createExercise } from '@/api/exercises/createExercise';
+import { deleteExercise } from '@/api/exercises/deleteExercise';
 import { updateExercise } from '@/api/exercises/updateExercise';
 
 interface ExercisesListProps {
@@ -53,6 +54,24 @@ const ExercisesList: FC<ExercisesListProps> = ({
     }
   };
 
+  const handleDeleteExercise = async (id: string) => {
+    const {
+      success,
+      message,
+      data: deletedExerciseId,
+    } = await deleteExercise(id);
+    if (success && deletedExerciseId) {
+      setExercises((prev) =>
+        prev.filter((exercise) => exercise.id !== deletedExerciseId),
+      );
+    } else {
+      toaster.create({
+        type: 'error',
+        description: message,
+      });
+    }
+  };
+
   return (
     <Box>
       <HStack justify="flex-end" mb={5}>
@@ -70,6 +89,7 @@ const ExercisesList: FC<ExercisesListProps> = ({
               key={exercise.id}
               exercise={exercise}
               onEdit={handleEditExercise}
+              onDelete={handleDeleteExercise}
             />
           ))}
         </VStack>

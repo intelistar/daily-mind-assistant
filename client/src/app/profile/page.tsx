@@ -1,23 +1,25 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 
 import { getAllTasks } from '@/api/tasks/getAllTasks';
 import { getTodayTask } from '@/api/tasks/getTodayTask';
 import CurrentTask from '@/components/CurrentTask';
 import { TaskList } from '@/components/TaskList';
-import UserHeading from '@/components/UserHeading';
+
+const NO_CURRENT_TASK = 'Нет заданий на сегодня';
 
 const ProfilePage = async () => {
   const { data: currentTask } = await getTodayTask();
   const { data: tasks } = await getAllTasks();
 
-  if (!currentTask || !tasks) return null;
-
   return (
-    <Box maxW="3xl" mx="auto" px="4" py="8">
-      <UserHeading />
-      <CurrentTask task={currentTask} />
+    <Box w="100%" py="8">
+      {currentTask ? (
+        <CurrentTask task={currentTask} />
+      ) : (
+        <Heading textAlign="center">{NO_CURRENT_TASK}</Heading>
+      )}
 
-      <TaskList tasks={tasks} />
+      {tasks && <TaskList tasks={tasks} />}
     </Box>
   );
 };

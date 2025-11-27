@@ -1,27 +1,33 @@
 import { Plus } from 'lucide-react';
 import { FC } from 'react';
 
-import { Button } from '@chakra-ui/react';
+import { IconButton } from '@chakra-ui/react';
 
-import createExerciseModal from '../ExerciseModal';
+import Modal from '../ui/Modal';
+
+import ExerciseForm from '@/forms/ExerciseForm';
+import { useModal } from '@/hooks/useModal';
 
 interface AddExerciseProps {
   onAdd: (text: string) => void;
 }
 
 const AddExercise: FC<AddExerciseProps> = ({ onAdd }) => {
-  const handleAdd = () => {
-    createExerciseModal.open('form', {
-      onSubmit: onAdd,
-    });
+  const { isOpen, onOpen, onClose } = useModal();
+
+  const handleAdd = async (text: string) => {
+    await onAdd(text);
+    onClose();
   };
 
   return (
     <>
-      <Button colorScheme="teal" onClick={handleAdd} borderRadius="lg">
-        <Plus /> Добавить
-      </Button>
-      <createExerciseModal.Viewport />
+      <IconButton colorScheme="teal" onClick={onOpen} borderRadius="lg">
+        <Plus />
+      </IconButton>
+      <Modal isOpen={isOpen} onClose={onClose} title="Добавление задачи">
+        <ExerciseForm onSave={handleAdd} />
+      </Modal>
     </>
   );
 };

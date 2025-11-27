@@ -3,7 +3,10 @@ import { FC } from 'react';
 
 import { IconButton } from '@chakra-ui/react';
 
-import createExerciseModal from '../ExerciseModal';
+import Modal from '../ui/Modal';
+
+import ExerciseForm from '@/forms/ExerciseForm';
+import { useModal } from '@/hooks/useModal';
 
 interface EditExerciseProps {
   onEdit: (text: string) => void;
@@ -11,11 +14,11 @@ interface EditExerciseProps {
 }
 
 const EditExercise: FC<EditExerciseProps> = ({ onEdit, text }) => {
-  const handleEdit = () => {
-    createExerciseModal.open('form', {
-      onSubmit: onEdit,
-      initialText: text,
-    });
+  const { isOpen, onOpen, onClose } = useModal();
+
+  const handleEdit = async (text: string) => {
+    await onEdit(text);
+    onClose();
   };
 
   return (
@@ -24,11 +27,13 @@ const EditExercise: FC<EditExerciseProps> = ({ onEdit, text }) => {
         aria-label="Редактировать"
         size="sm"
         variant="ghost"
-        onClick={handleEdit}
+        onClick={onOpen}
       >
         <Edit2 />
       </IconButton>
-      <createExerciseModal.Viewport />
+      <Modal isOpen={isOpen} onClose={onClose} title="Редактирование задачи">
+        <ExerciseForm onSave={handleEdit} initialValue={text} />
+      </Modal>
     </>
   );
 };

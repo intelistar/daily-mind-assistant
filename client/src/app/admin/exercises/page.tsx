@@ -3,8 +3,6 @@ import { Box, Center, Heading, Text, VStack } from '@chakra-ui/react';
 import { getAllExercises } from '@/api/exercises/getAllExercises';
 import ExercisesList from '@/components/ExercisesList';
 
-// const ERROR_EXERCISES = "Не удалось загрузить задания";
-
 const AdminExercisesPage = async () => {
   const { success, message, data: exercises } = await getAllExercises();
 

@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AddRoleDto } from './dto/add-role.dto';
 import { CreateTelegramUserDto } from './dto/create-telegram-user';
-import { UserRole } from 'generated/prisma';
+import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class UsersService {

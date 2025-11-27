@@ -2,7 +2,7 @@ import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { User } from 'generated/prisma';
+import { User } from '@prisma/client';
 import { RegisterDto } from './dto/register.dto';
 import { Response } from 'express';
 import { CookieService } from './cookie.service';
@@ -35,5 +35,12 @@ export class AuthController {
     this.cookieService.setAuthCookies(res, access_token, currentUser);
 
     return { ...currentUser };
+  }
+
+  @Post('/logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    this.cookieService.clearAuthCookies(res);
+
+    return { message: 'Successfuly logout' };
   }
 }

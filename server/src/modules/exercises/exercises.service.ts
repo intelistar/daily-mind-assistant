@@ -34,6 +34,22 @@ export class ExercisesService {
     return updatedExercise;
   }
 
+  async delete(id: string) {
+    const existingExercise = await this.prisma.exercise.findUnique({
+      where: { id },
+    });
+
+    if (!existingExercise) {
+      throw new NotFoundException(`Exercise with id ${id} not found`);
+    }
+
+    const deletedExercise = await this.prisma.exercise.delete({
+      where: { id },
+    });
+
+    return deletedExercise.id;
+  }
+
   async getRandom() {
     const count = await this.prisma.exercise.count();
     const randomIndex = Math.floor(Math.random() * count);

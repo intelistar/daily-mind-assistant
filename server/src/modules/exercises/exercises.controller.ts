@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -8,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Roles } from '../auth/decorators/role-auth.decorator';
-import { UserRole } from 'generated/prisma';
+import { UserRole } from '@prisma/client';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/role-auth.guard';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
@@ -40,5 +41,12 @@ export class ExercisesController {
   @Put(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateExerciseDto) {
     return this.exercisesService.update(id, dto);
+  }
+
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    return this.exercisesService.delete(id);
   }
 }

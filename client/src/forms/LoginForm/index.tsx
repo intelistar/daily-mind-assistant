@@ -68,7 +68,7 @@ export const LoginForm = () => {
       borderWidth="1px"
       borderRadius="lg"
       boxShadow="lg"
-      bg="white"
+      colorPalette="gray"
     >
       <Heading mb="6" size="lg" textAlign="center">
         Sign In

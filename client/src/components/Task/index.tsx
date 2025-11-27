@@ -15,10 +15,12 @@ const TaskComponent: FC<TaskComponentProps> = ({ task }) => {
 
   return (
     <Box
+      w="100%"
       borderWidth="1px"
-      borderRadius="md"
+      borderRadius="xl"
       p={3}
-      bg={isCompleted ? 'green.50' : 'gray.50'}
+      // bg={isCompleted ? 'green.50' : 'gray.50'}
+      colorPalette="gray"
     >
       <HStack justify="space-between">
         <Text>{text}</Text>

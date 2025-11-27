@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TaskStatus } from 'generated/prisma';
+import { TaskStatus } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   endOfDay,

@@ -6,7 +6,7 @@ import {
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'generated/prisma';
+import { User } from '@prisma/client';
 import { RegisterDto } from './dto/register.dto';
 import { MESSAGES } from './constants/messages';
 
