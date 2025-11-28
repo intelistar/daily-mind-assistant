@@ -1,0 +1,90 @@
+name: Server CD
+
+on:
+  push:
+    paths:
+      - "server/**"
+    branches:
+      - main
+
+  pull_request:
+    paths:
+      - "server/**"
+    branches:
+      - main
+
+jobs:
+  deploy-staging:
+    name: Deploy to staging
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Render (Staging)
+        env:
+          RENDER_DEPLOY_HOOK_STAGING: ${{ secrets.RENDER_DEPLOY_HOOK_STAGING }}
+        run: |
+          curl -X POST $RENDER_DEPLOY_HOOK_STAGING
+
+      - name: Notify deployment
+        run: echo "✅ Staging deployment triggered successfully"
+
+  test-staging:
+    name: Run Integration Tests on Staging
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run e2e tests
+        env:
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+        run: yarn test:e2e
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Render (Production)
+        env:
+          RENDER_DEPLOY_HOOK_PRODUCTION: ${{ secrets.RENDER_DEPLOY_HOOK_PRODUCTION }}
+        run: |
+          curl -X POST $RENDER_DEPLOY_HOOK_PRODUCTION
+
+      - name: Notify deployment
+        run: echo "🚀 Production deployment triggered successfully"
+
+      - name: Wait for deployment
+        run: sleep 60
+
+      - name: Health check
+        env:
+          PRODUCTION_URL: ${{ secrets.PRODUCTION_URL }}
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" $PRODUCTION_URL)
+          if [ $response -eq 200 ]; then
+            echo "✅ Production is healthy"
+          else
+            echo "❌ Production health check failed with status $response"
+            exit 1
+          fi
