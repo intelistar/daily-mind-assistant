@@ -1,44 +1,17 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { App } from 'supertest/types';
-import { PrismaClient } from '@prisma/client';
-import { AppModule } from '../src/app.module';
+import request from 'supertest';
 
-describe('AuthController (e2e)', () => {
-  let app: INestApplication<App>;
-  let prisma: PrismaClient;
+describe('Auth (staging)', () => {
+  const api = request(process.env.STAGING_URL!);
 
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+  it('/auth/register POST', async () => {
+    const dto = {
+      name: 'Test User',
+      email: `test_${Date.now()}@mail.com`,
+      password: '11111111',
+    };
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    const res = await api.post('/auth/register').send(dto);
 
-    prisma = new PrismaClient();
-  });
-
-  afterAll(async () => {
-    await prisma.task.deleteMany();
-    await prisma.user.deleteMany();
-
-    await app.close().catch(() => {});
-  });
-
-  describe('/auth/register POST', () => {
-    it('should register a user', async () => {
-      const registerDto = {
-        name: 'John Doee',
-        email: 'john1@example.com',
-        password: '11111111',
-      };
-
-      await request(app.getHttpServer())
-        .post('/auth/register')
-        .send(registerDto)
-        .expect(201);
-    });
+    expect(res.status).toBe(201);
   });
 });

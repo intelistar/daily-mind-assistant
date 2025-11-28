@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
-// import { TelegrafModule } from 'nestjs-telegraf';
+import { TelegrafModule } from 'nestjs-telegraf';
 import { StepService } from './steps/steps.service';
-// import * as LocalSession from 'telegraf-session-local';
+import * as LocalSession from 'telegraf-session-local';
 import { UsersModule } from '../users/users.module';
 import { TelegramUpdate } from './telegram.update';
 import { TasksModule } from '../tasks/tasks.module';
@@ -15,17 +15,17 @@ import { TextHandler } from './handlers/text.handler';
 
 @Module({
   imports: [
-    // TelegrafModule.forRootAsync({
-    //   useFactory: () => ({
-    //     token: process.env.TELEGRAM_BOT_TOKEN!,
-    //     middlewares: [
-    //       new LocalSession({
-    //         database: 'sessions.json',
-    //         property: 'session',
-    //       }).middleware(),
-    //     ],
-    //   }),
-    // }),
+    TelegrafModule.forRootAsync({
+      useFactory: () => ({
+        token: process.env.TELEGRAM_BOT_TOKEN!,
+        middlewares: [
+          new LocalSession({
+            database: 'sessions.json',
+            property: 'session',
+          }).middleware(),
+        ],
+      }),
+    }),
     UsersModule,
     forwardRef(() => TasksModule),
     ConfigModule,
