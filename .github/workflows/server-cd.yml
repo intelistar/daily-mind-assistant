@@ -53,7 +53,7 @@ jobs:
               break
           fi
 
-          if [ "$STATUS" = "failed" ]; then
+          if [ "$STATUS" = "update_failed" ]; then
               echo "❌ Deployment failed!"
               exit 1
           fi
