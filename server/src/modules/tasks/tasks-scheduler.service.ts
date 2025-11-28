@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 // import { Cron } from '@nestjs/schedule';
 import { UsersService } from '../users/users.service';
 import { TasksService } from '../tasks/tasks.service';
-import { TelegramService } from '../telegram/telegram.service';
+// import { TelegramService } from '../telegram/telegram.service';
 import { ExercisesService } from '../exercises/exercises.service';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class TasksSchedulerService {
     private usersService: UsersService,
     private tasksService: TasksService,
     private exercisesService: ExercisesService,
-    private telegramService: TelegramService,
+    // private telegramService: TelegramService,
   ) {}
 
   // @Cron('*/1 * * * *')
