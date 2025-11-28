@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { COOKIE_KEYS, COOKIE_OPTIONS } from './constants/cookie.constants';
 import { Response } from 'express';
+
 import { UserResponse } from '../../shared/types/base-response';
 
 @Injectable()
