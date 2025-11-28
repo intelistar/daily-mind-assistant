@@ -39,11 +39,26 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |
           STATUS=""
-          while [ "$STATUS" != "live" ]; do
-            STATUS=$(curl -s -H "Authorization: Bearer $RENDER_API_KEY" \
-              https://api.render.com/v1/services/$RENDER_SERVICE_ID | jq -r .service.health)
-            echo "Current status: $STATUS"
-            sleep 5
+          echo "⏳ Waiting for Render deployment..."
+          while true; do
+          # Получаем статус последнего деплоя
+          STATUS=$(curl -s -H "Authorization: Bearer $RENDER_API_KEY" \
+              "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys?limit=1" \
+              | jq -r '.[0].deploy.status')
+
+          echo "Current deployment status: $STATUS"
+
+          if [ "$STATUS" = "live" ]; then
+              echo "✅ Deployment succeeded!"
+              break
+          fi
+
+          if [ "$STATUS" = "failed" ]; then
+              echo "❌ Deployment failed!"
+              exit 1
+          fi
+
+          sleep 15
           done
 
       - name: Notify deployment
