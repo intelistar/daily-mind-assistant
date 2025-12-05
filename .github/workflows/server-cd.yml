@@ -86,7 +86,8 @@ jobs:
         run: yarn install
 
       - name: Run e2e tests
-
+        env:
+          STAGING_URL: ${{ secrets.STAGING_URL }}
         run: yarn test:e2e
 
   deploy-production:
