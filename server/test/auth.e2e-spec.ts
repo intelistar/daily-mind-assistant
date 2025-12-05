@@ -1,4 +1,4 @@
-import request from 'supertest';
+import * as request from 'supertest';
 
 describe('Auth (staging)', () => {
   const api = request(process.env.STAGING_URL!);
