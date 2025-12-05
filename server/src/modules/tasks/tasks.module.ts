@@ -5,6 +5,7 @@ import { TasksService } from './tasks.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { TasksSchedulerService } from './tasks-scheduler.service';
 import { UsersModule } from '../users/users.module';
+
 import { ExercisesModule } from '../exercises/exercises.module';
 
 @Module({
