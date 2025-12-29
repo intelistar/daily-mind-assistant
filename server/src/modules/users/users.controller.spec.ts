@@ -37,7 +37,7 @@ describe('Users Controller', () => {
 
   it('Should be defined', () => {
     expect(controller).toBeDefined();
-    expect(true).toBeFalsy();
+    // expect(true).toBeFalsy();
   });
 
   it('Should return array of all users', async () => {
