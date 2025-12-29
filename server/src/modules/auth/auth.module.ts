@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { CookieService } from './cookie.service';
+
 import { JWT_EXPIRES } from './constants/jwt';
 
 @Module({
